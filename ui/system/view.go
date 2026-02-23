@@ -2,45 +2,42 @@ package system
 
 import (
 	"container-tui/ui/components"
-	"container-tui/ui/system/subcommands"
 
 	"github.com/charmbracelet/lipgloss"
 )
 
 func RenderSystem(m *Model) string {
-	isRunning := false
-	if statusModel, ok := m.ActiveView.(*subcommands.StatusModel); ok {
-		status := statusModel.Fields["status"]
-		if status == "running" || status == "started" {
-			isRunning = true
-		}
-	}
+	header := components.RenderHeaderWithStatus("Container TUI", false)
 
-	header := components.RenderHeaderWithStatus("Container TUI", isRunning)
-
-	menuLines := make([]string, len(m.Subcommands))
-	for i, cmd := range m.Subcommands {
-		if m.Cursor == i {
-			menuLines[i] = components.CursorStyle.Render("▶ " + cmd)
+	body := ""
+	if m.Width > 0 && m.Height > 0 {
+		if m.Loading {
+			body = "Loading containers..."
+		} else if m.Error != "" {
+			body = "Error: " + m.Error
 		} else {
-			menuLines[i] = "  " + cmd
+			body = renderContainerList(m)
 		}
 	}
 
-	menuWidth := m.Width / 4
-	menu := lipgloss.JoinVertical(lipgloss.Left, menuLines...)
-	menu = components.MenuStyle.Copy().Width(menuWidth).Render(menu)
-
-	output := ""
-	if m.ActiveView != nil {
-		output = m.ActiveView.View()
-	}
-	outputWidth := m.Width - menuWidth - 3
-	outputBox := components.OutputBoxStyle.Copy().Width(outputWidth).Render(output)
-
-	body := lipgloss.JoinHorizontal(lipgloss.Top, menu, outputBox)
-
-	footer := components.RenderFooter("↑/↓ Navigate  •  Enter Run  •  q Quit", m.Width)
+	footer := components.RenderFooter("↑/↓ Navigate  •  ? Help  •  q Quit", m.Width)
 
 	return lipgloss.JoinVertical(lipgloss.Top, header, body, footer)
+}
+
+func renderContainerList(m *Model) string {
+	if len(m.Containers) == 0 {
+		return "No containers found."
+	}
+
+	lines := make([]string, len(m.Containers))
+	for i, c := range m.Containers {
+		prefix := "  "
+		if i == m.SelectedIndex {
+			prefix = components.CursorStyle.Render("▶ ")
+		}
+		lines[i] = prefix + c.Name + "  [" + c.Status + "]"
+	}
+
+	return lipgloss.JoinVertical(lipgloss.Left, lines...)
 }
