@@ -26,7 +26,13 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. Each container in the list shows a color-coded status indicator: green for running, gray for stopped, red for error
   3. Each container in the list shows CPU and memory usage bars when that data is available from the CLI
   4. Pressing `?` opens a keyboard shortcut help overlay that lists all available keybindings, and pressing `?` or `Esc` dismisses it
-**Plans**: TBD
+**Plans**: 4 plans
+
+Plans:
+- [ ] 01-01-PLAN.md — Container data model and FetchContainers CLI command
+- [ ] 01-02-PLAN.md — Container row rendering: status colors and resource bars
+- [ ] 01-03-PLAN.md — Root model rearchitecture: container list state, navigation, auto-refresh
+- [ ] 01-04-PLAN.md — Layout assembly: two-pane view, help overlay, visual verification
 
 ### Phase 2: Container Selection & Detail View
 **Goal**: Users can navigate the container list and inspect any container's full configuration details
@@ -45,5 +51,5 @@ Phases execute in numeric order: 1 → 2
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Panel Layout & Visuals | 0/TBD | Not started | - |
+| 1. Panel Layout & Visuals | 0/4 | Not started | - |
 | 2. Container Selection & Detail View | 0/TBD | Not started | - |
