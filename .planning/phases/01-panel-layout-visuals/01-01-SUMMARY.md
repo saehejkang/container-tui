@@ -64,7 +64,7 @@ Each task was committed atomically:
 
 1. **Task 1: Container type and FetchContainers command** - `4fd9276` (feat)
 
-**Plan metadata:** (docs commit follows)
+**Plan metadata:** `0534881` (docs: complete plan)
 
 ## Files Created/Modified
 - `pkg/containers.go` - Container struct, FetchContainersMsg type, and FetchContainers tea.Cmd
