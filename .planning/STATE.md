@@ -48,6 +48,9 @@ Recent decisions affecting current work:
 - [01-01]: Used pkg.RunCommand wrapper consistent with StatusModel pattern
 - [01-01]: Status normalized to three canonical values: running/error/stopped
 - [01-01]: CPU/memory parsed best-effort; zero-value on missing or malformed fields
+- [01-02]: Block characters (█/░) for resource bars — no dependencies, terminal-universal
+- [01-02]: Memory bar capped at 1024 MB (1 GB) for display normalization
+- [01-02]: Rune-aware name truncation handles multi-byte characters safely
 - [01-03]: Removed subcommands/ActiveView architecture — model now owns container list directly
 - [01-03]: 5-second tea.Tick self-perpetuating refresh cycle (each tick re-schedules next)
 - [01-03]: WindowSizeMsg guarded (Width > 0 && Height > 0) to prevent zero-dimension layout math
@@ -67,5 +70,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-23
-Stopped at: Completed 01-03-PLAN.md (Model rearchitect)
+Stopped at: Completed 01-02-PLAN.md (Container row rendering — status colors and resource bars)
 Resume file: None
