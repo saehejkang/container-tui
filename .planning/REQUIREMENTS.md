@@ -46,7 +46,7 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| TUI-01 | Phase 1 | Pending |
+| TUI-01 | Phase 1 | In Progress (01-01 data model complete) |
 | TUI-02 | Phase 1 | Pending |
 | TUI-03 | Phase 1 | Pending |
 | TUI-04 | Phase 1 | Pending |
