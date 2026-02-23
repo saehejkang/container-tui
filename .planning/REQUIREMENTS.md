@@ -50,7 +50,7 @@
 | TUI-02 | Phase 1 | Pending |
 | TUI-03 | Phase 1 | Pending |
 | TUI-04 | Phase 1 | Pending |
-| TUI-05 | Phase 1 | Pending |
+| TUI-05 | Phase 2 | Pending |
 
 **Coverage:**
 - v1 requirements: 5 total
@@ -59,4 +59,4 @@
 
 ---
 *Requirements defined: 2026-02-22*
-*Last updated: 2026-02-22 after initial definition*
+*Last updated: 2026-02-22 after roadmap creation — traceability updated to reflect 2-phase structure*
