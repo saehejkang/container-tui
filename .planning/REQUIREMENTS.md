@@ -8,8 +8,8 @@
 ### TUI Layout & Visuals
 
 - [x] **TUI-01**: User sees a multi-pane layout — container list on left, detail/output pane on right
-- [ ] **TUI-02**: Container list shows color-coded status indicators (running=green, stopped=gray, error=red)
-- [ ] **TUI-03**: Container list shows resource usage bars (CPU, memory) where data is available from CLI
+- [x] **TUI-02**: Container list shows color-coded status indicators (running=green, stopped=gray, error=red)
+- [x] **TUI-03**: Container list shows resource usage bars (CPU, memory) where data is available from CLI
 - [ ] **TUI-04**: User can press `?` to open a keyboard shortcut help overlay
 
 ### TUI Container Management
@@ -47,8 +47,8 @@
 | Requirement | Phase | Status |
 |-------------|-------|--------|
 | TUI-01 | Phase 1 | In Progress (01-01 data model complete) |
-| TUI-02 | Phase 1 | Pending |
-| TUI-03 | Phase 1 | Pending |
+| TUI-02 | Phase 1 | Complete |
+| TUI-03 | Phase 1 | Complete |
 | TUI-04 | Phase 1 | Pending |
 | TUI-05 | Phase 2 | Pending |
 
