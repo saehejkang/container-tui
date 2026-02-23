@@ -10,8 +10,7 @@ import (
 )
 
 func main() {
-	subcommandsList := []string{"start", "stop", "status"}
-	systemModel := system.NewSystemModel(subcommandsList)
+	systemModel := system.NewSystemModel()
 
 	p := tea.NewProgram(systemModel, tea.WithAltScreen())
 

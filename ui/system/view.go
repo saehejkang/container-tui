@@ -2,45 +2,63 @@ package system
 
 import (
 	"container-tui/ui/components"
-	"container-tui/ui/system/subcommands"
 
 	"github.com/charmbracelet/lipgloss"
 )
 
 func RenderSystem(m *Model) string {
-	isRunning := false
-	if statusModel, ok := m.ActiveView.(*subcommands.StatusModel); ok {
-		status := statusModel.Fields["status"]
-		if status == "running" || status == "started" {
-			isRunning = true
-		}
+	if m.Width == 0 || m.Height == 0 {
+		return "Initializing..."
 	}
 
+	leftWidth := m.Width / 3
+	rightWidth := m.Width - leftWidth - 2 // -2 for border/margin
+
+	// Derive isRunning from container statuses.
+	isRunning := false
+	for _, c := range m.Containers {
+		if c.Status == "running" {
+			isRunning = true
+			break
+		}
+	}
 	header := components.RenderHeaderWithStatus("Container TUI", isRunning)
 
-	menuLines := make([]string, len(m.Subcommands))
-	for i, cmd := range m.Subcommands {
-		if m.Cursor == i {
-			menuLines[i] = components.CursorStyle.Render("▶ " + cmd)
-		} else {
-			menuLines[i] = "  " + cmd
+	// Build left panel (container list).
+	var leftContent string
+	if m.Loading {
+		leftContent = "  Loading..."
+	} else if len(m.Containers) == 0 {
+		leftContent = "  No containers"
+	} else {
+		rows := make([]string, len(m.Containers))
+		for i, c := range m.Containers {
+			rows[i] = components.RenderContainerRow(c, i == m.SelectedIndex, leftWidth)
 		}
+		leftContent = lipgloss.JoinVertical(lipgloss.Left, rows...)
+	}
+	leftPanel := components.MenuStyle.Copy().Width(leftWidth).Render(leftContent)
+
+	// Build right panel placeholder.
+	placeholder := lipgloss.NewStyle().
+		Foreground(lipgloss.Color("#888888")).
+		Render("Select a container to view details")
+	rightPanel := components.OutputBoxStyle.Copy().Width(rightWidth).Render(placeholder)
+
+	// Compose body.
+	body := lipgloss.JoinHorizontal(lipgloss.Top, leftPanel, rightPanel)
+
+	// Render footer.
+	footer := components.RenderFooter("↑/↓  Navigate  •  ?  Help  •  q  Quit", m.Width)
+
+	// Base layout.
+	baseLayout := lipgloss.JoinVertical(lipgloss.Top, header, body, footer)
+
+	// Overlay help if needed.
+	if m.ShowHelp {
+		overlay := components.RenderHelpOverlay(m.Width, m.Height)
+		return lipgloss.Place(m.Width, m.Height, lipgloss.Center, lipgloss.Center, overlay)
 	}
 
-	menuWidth := m.Width / 4
-	menu := lipgloss.JoinVertical(lipgloss.Left, menuLines...)
-	menu = components.MenuStyle.Copy().Width(menuWidth).Render(menu)
-
-	output := ""
-	if m.ActiveView != nil {
-		output = m.ActiveView.View()
-	}
-	outputWidth := m.Width - menuWidth - 3
-	outputBox := components.OutputBoxStyle.Copy().Width(outputWidth).Render(output)
-
-	body := lipgloss.JoinHorizontal(lipgloss.Top, menu, outputBox)
-
-	footer := components.RenderFooter("↑/↓ Navigate  •  Enter Run  •  q Quit", m.Width)
-
-	return lipgloss.JoinVertical(lipgloss.Top, header, body, footer)
+	return baseLayout
 }

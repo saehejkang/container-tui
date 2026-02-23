@@ -1,77 +1,90 @@
 package system
 
 import (
-	"container-tui/ui/system/subcommands"
+	"time"
+
+	"container-tui/pkg"
 
 	tea "github.com/charmbracelet/bubbletea"
 )
 
 type Model struct {
-	Cursor      int
-	Subcommands []string
-	ActiveView  tea.Model
-	Width       int
-	Height      int
+	Containers    []pkg.Container
+	SelectedIndex int
+	ShowHelp      bool
+	Width         int
+	Height        int
+	Loading       bool
+	Error         string
 }
 
-func NewSystemModel(subs []string) *Model {
-	model := &Model{
-		Cursor:      0,
-		Subcommands: subs,
-		ActiveView:  subcommands.NewStatusModel(),
+func NewSystemModel() *Model {
+	return &Model{
+		Loading: true,
 	}
-	return model
+}
+
+type refreshTickMsg struct{}
+
+func tickRefresh() tea.Cmd {
+	return tea.Tick(5*time.Second, func(t time.Time) tea.Msg {
+		return refreshTickMsg{}
+	})
 }
 
 func (m *Model) Init() tea.Cmd {
-	if m.ActiveView != nil {
-		return m.ActiveView.Init()
-	}
-	return nil
+	return tea.Batch(
+		pkg.FetchContainers(),
+		tickRefresh(),
+	)
 }
 
 func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
-		m.Width = msg.Width
-		m.Height = msg.Height
+		if msg.Width > 0 && msg.Height > 0 {
+			m.Width = msg.Width
+			m.Height = msg.Height
+		}
 		return m, nil
+
+	case pkg.FetchContainersMsg:
+		m.Containers = []pkg.Container(msg)
+		m.Loading = false
+		if len(m.Containers) == 0 {
+			m.SelectedIndex = 0
+		} else if m.SelectedIndex >= len(m.Containers) {
+			m.SelectedIndex = len(m.Containers) - 1
+		}
+		return m, nil
+
+	case refreshTickMsg:
+		return m, tea.Batch(pkg.FetchContainers(), tickRefresh())
 
 	case tea.KeyMsg:
 		switch msg.String() {
 		case "q", "ctrl+c":
 			return m, tea.Quit
-		case "up":
-			if m.Cursor > 0 {
-				m.Cursor--
+		case "?":
+			m.ShowHelp = !m.ShowHelp
+		case "esc":
+			if m.ShowHelp {
+				m.ShowHelp = false
 			}
-		case "down":
-			if m.Cursor < len(m.Subcommands)-1 {
-				m.Cursor++
+		case "up", "k":
+			if !m.ShowHelp && m.SelectedIndex > 0 {
+				m.SelectedIndex--
 			}
-		case "enter":
-			switch m.Subcommands[m.Cursor] {
-			case "status":
-				m.ActiveView = subcommands.NewStatusModel()
-			case "start":
-				m.ActiveView = subcommands.NewStartModel()
-			case "stop":
-				m.ActiveView = subcommands.NewStopModel()
-			}
-			if m.ActiveView != nil {
-				return m, m.ActiveView.Init()
+		case "down", "j":
+			if !m.ShowHelp && m.SelectedIndex < len(m.Containers)-1 {
+				m.SelectedIndex++
 			}
 		}
+		return m, nil
 
 	default:
-		if m.ActiveView != nil {
-			var cmd tea.Cmd
-			m.ActiveView, cmd = m.ActiveView.Update(msg)
-			return m, cmd
-		}
+		return m, nil
 	}
-
-	return m, nil
 }
 
 func (m *Model) View() string {
