@@ -7,7 +7,7 @@
 
 ### TUI Layout & Visuals
 
-- [ ] **TUI-01**: User sees a multi-pane layout — container list on left, detail/output pane on right
+- [x] **TUI-01**: User sees a multi-pane layout — container list on left, detail/output pane on right
 - [ ] **TUI-02**: Container list shows color-coded status indicators (running=green, stopped=gray, error=red)
 - [ ] **TUI-03**: Container list shows resource usage bars (CPU, memory) where data is available from CLI
 - [ ] **TUI-04**: User can press `?` to open a keyboard shortcut help overlay

@@ -30,8 +30,8 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 Plans:
 - [x] 01-01-PLAN.md — Container data model and FetchContainers CLI command
-- [ ] 01-02-PLAN.md — Container row rendering: status colors and resource bars
-- [ ] 01-03-PLAN.md — Root model rearchitecture: container list state, navigation, auto-refresh
+- [x] 01-02-PLAN.md — Container row rendering: status colors and resource bars
+- [x] 01-03-PLAN.md — Root model rearchitecture: container list state, navigation, auto-refresh
 - [ ] 01-04-PLAN.md — Layout assembly: two-pane view, help overlay, visual verification
 
 ### Phase 2: Container Selection & Detail View
@@ -51,5 +51,5 @@ Phases execute in numeric order: 1 → 2
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Panel Layout & Visuals | 1/4 | In progress | - |
+| 1. Panel Layout & Visuals | 3/4 | In progress | - |
 | 2. Container Selection & Detail View | 0/TBD | Not started | - |
